@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>WebComponents: Counter</title>
+    <style>
+      p {
+        color: red;
+      }
+    </style>
+    <script type="text/javascript">
+      const counterTemplate = document.createElement('template');
+      counterTemplate.innerHTML = `
+        <style>
+          div {
+            display: flex;
+            justify-content: center;
+            background-color: #DDD;
+            padding: 1rem;
+          }
+
+          p {
+            margin: 1rem;
+          }
+        </style>
+        <div>
+          <button aria-label="decrement" id="decrement">-1</button>
+          <p></p>
+          <button aria-label="increment" id="increment">+1</button>
+        </div>
+      `
+
+      class Counter extends HTMLElement {
+        // Attributes, which should be observed
+        static get observedAttributes() {
+          return ['value'];
+        }
+
+        get value() {
+          return this._value;
+        }
+
+        set value(value) {
+          this._value = value;
+          this.valueElement.innerText = this._value;
+        }
+
+        constructor() {
+          super();
+
+          // Create a new shadow dom root.
+          // The mode describes, if the node can be accessed from the outside.
+          this.attachShadow({mode: 'open'});
+
+          // Fill the shadow dom with the template by a deep clone.
+          this.shadowRoot.appendChild(counterTemplate.content.cloneNode(true));
+
+          this.valueElement = this.shadowRoot.querySelector('p');
+          this.decrementElement = this.shadowRoot.querySelector('#decrement');
+          this.incrementElement = this.shadowRoot.querySelector('#increment');
+
+          this.decrementElement.addEventListener('click', (e) => this.value--);
+          this.incrementElement.addEventListener('click', (e) => this.value++);
+
+          this.value = 0;
+        }
+      }
+      customElements.define('openscript-counter', Counter);
+    </script>
+  </head>
+  <body>
+    <h1>WebComponents: Counter</h1>
+    <!-- Custom elements require a closing tag -->
+    <openscript-counter></openscript-counter>
+    <div>
+      <p>Another div to demonstrate component encapsulation.</p>
+    </div>
+  </body>
+</html>
