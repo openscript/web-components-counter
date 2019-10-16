@@ -64,6 +64,12 @@
 
           this.value = 0;
         }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+          if (name === 'value') {
+            this.value = parseInt(newValue, 10);
+          }
+        }
       }
       customElements.define('openscript-counter', Counter);
     </script>
@@ -72,6 +78,7 @@
     <h1>WebComponents: Counter</h1>
     <!-- Custom elements require a closing tag -->
     <openscript-counter></openscript-counter>
+    <openscript-counter value="100"></openscript-counter>
     <div>
       <p>Another div to demonstrate component encapsulation.</p>
     </div>
